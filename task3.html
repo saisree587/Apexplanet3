@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Advanced Styling & JavaScript Task</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: #f0f4f8;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      background: #1e88e5;
+      color: white;
+      padding: 1rem;
+      border-radius: 10px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .box {
+      flex: 1 1 300px;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    button {
+      padding: 10px 15px;
+      background: #1e88e5;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #1565c0;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Advanced Styling & JavaScript</h1>
+    <p>Responsive Layout • Interactive Quiz • API Integration</p>
+  </header>
+
+  <div class="container">
+    <!-- Responsive Quiz -->
+    <div class="box">
+      <h2>Interactive Quiz</h2>
+      <p id="question">Click Start to Begin the Quiz</p>
+      <div id="options"></div>
+      <button onclick="startQuiz()">Start Quiz</button>
+    </div>
+
+    <!-- Joke API Section -->
+    <div class="box">
+      <h2>Random Joke</h2>
+      <p id="joke">Click below to get a joke 😄</p>
+      <button onclick="fetchJoke()">Get Joke</button>
+    </div>
+  </div>
+
+  <script>
+    // Interactive Quiz
+    const quizData = [
+      {
+        question: "What does HTML stand for?",
+        options: ["Hyperlinks and Text Markup Language", "Hyper Text Markup Language", "Home Tool Markup Language"],
+        answer: "Hyper Text Markup Language"
+      },
+      {
+        question: "What is the correct syntax to link a CSS file?",
+        options: ["<link rel='stylesheet' href='style.css'>", "<style src='style.css'>", "<css>style.css</css>"],
+        answer: "<link rel='stylesheet' href='style.css'>"
+      },
+      {
+        question: "Which company developed JavaScript?",
+        options: ["Netscape", "Mozilla", "Microsoft"],
+        answer: "Netscape"
+      }
+    ];
+
+    let currentQuestion = 0;
+
+    function startQuiz() {
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const q = quizData[currentQuestion];
+      document.getElementById('question').textContent = q.question;
+      const optionsDiv = document.getElementById('options');
+      optionsDiv.innerHTML = "";
+
+      q.options.forEach(option => {
+        const btn = document.createElement('button');
+        btn.textContent = option;
+        btn.onclick = () => checkAnswer(option);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected) {
+      const correct = quizData[currentQuestion].answer;
+      if (selected === correct) {
+        alert("Correct!");
+      } else {
+        alert("Wrong answer!");
+      }
+
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        showQuestion();
+      } else {
+        document.getElementById('question').textContent = "Quiz Completed!";
+        document.getElementById('options').innerHTML = "";
+      }
+    }
+
+    // Joke API
+    async function fetchJoke() {
+      const response = await fetch("https://icanhazdadjoke.com/", {
+        headers: {
+          Accept: "application/json"
+        }
+      });
+      const data = await response.json();
+      document.getElementById("joke").textContent = data.joke;
+    }
+  </script>
+
+</body>
+</html>
